@@ -15,12 +15,22 @@ class OpeningTypeSerializer(serializers.ModelSerializer):
 
 
 class PlayerSerializer(serializers.ModelSerializer):
-    country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
-    rival_name = serializers.PrimaryKeyRelatedField(queryset=Player.objects.all(), allow_null=True)
-
     class Meta:
         model = Player
-        fields = '__all__'
+        fields = ('id', 'name', 'rival_name', 'country', 'game_count', 'total_points')
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['rival_name'] = instance.rival_name.name
+        if instance.games.count() > 0:
+            data['result'] = instance.games.result
+            data['number_of_moves'] = instance.games.number_of_moves
+            data['date_played'] = instance.games.date_played
+            data['opening_type'] = instance.games.opening_type.name
+            data['color'] = instance.games.color
+            data['country'] = instance.country.name
+            data['games'] = [game.id for game in instance.games.all()]
+        return data
 
 
 class GameSerializer(serializers.ModelSerializer):
