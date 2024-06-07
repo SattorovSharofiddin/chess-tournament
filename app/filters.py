@@ -1,8 +1,6 @@
-# filters players by name, elo_rating, and country
-# filters games by result, opening_type, date_played, and player
-from django_filters import filters, FilterSet, DateTimeFromToRangeFilter, widgets
+from django_filters import filters, FilterSet
 
-from app.models import Player, Game
+from app.models import Player
 
 
 class PlayerFilter(FilterSet):
@@ -17,13 +15,3 @@ class PlayerFilter(FilterSet):
     class Meta:
         model = Player
         fields = ['name', 'elo_rating', 'country']
-
-
-class GameFilter(FilterSet):
-    result = filters.CharFilter(field_name='result', lookup_expr='exact')
-    opening_type = filters.CharFilter(field_name='opening_type__name', lookup_expr='icontains')
-    player = filters.CharFilter(field_name='player__name', lookup_expr='icontains')
-
-    class Meta:
-        model = Game
-        fields = ['result', 'opening_type', 'player']

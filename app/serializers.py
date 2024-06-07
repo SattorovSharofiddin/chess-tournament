@@ -30,14 +30,15 @@ class GamePostSerializer(serializers.ModelSerializer):
 
 class GameSerializer(serializers.ModelSerializer):
     opening_type = serializers.PrimaryKeyRelatedField(queryset=OpeningType.objects.all())
+    start_date = serializers.DateField(write_only=True)
+    end_date = serializers.DateField(write_only=True)
 
     class Meta:
         model = Game
-        fields = ('id', 'result', 'color', 'number_of_moves', 'date_played', 'opening_type')
+        fields = ('id', 'result', 'color', 'number_of_moves', 'date_played', 'opening_type', 'start_date', 'end_date')
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['player'] = instance.player.name
         data['rival_name'] = instance.rival_name.name
         return data
-    
