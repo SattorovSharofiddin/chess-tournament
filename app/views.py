@@ -4,6 +4,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from app.filters import PlayerFilter, GameFilter
 from app.models import Player, Game
 from app.serializers import PlayerSerializer, GameSerializer, GamePostSerializer
 
@@ -13,7 +14,7 @@ class PlayerList(ModelViewSet):
     serializer_class = PlayerSerializer
     parser_classes = FormParser, MultiPartParser
     filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['name', 'total_points', 'country']
+    filterset_class = PlayerFilter
 
 
 class GameList(ModelViewSet):
@@ -21,8 +22,7 @@ class GameList(ModelViewSet):
     serializer_class = GameSerializer
     parser_classes = FormParser, MultiPartParser
     filter_backends = [DjangoFilterBackend]
-
-    # filterset_fields = ['white_player__name', 'black_player__name', 'result', 'opening_type', 'date_played']
+    filterset_class = GameFilter
 
     def get_serializer_class(self):
         if self.action == 'create':

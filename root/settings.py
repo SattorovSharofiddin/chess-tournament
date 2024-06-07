@@ -77,6 +77,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
+
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -88,6 +89,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'app.pagination.StandardResultsSetPagination',
+
 }
 
 SWAGGER_SETTINGS = {

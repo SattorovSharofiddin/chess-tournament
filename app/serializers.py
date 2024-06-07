@@ -19,17 +19,11 @@ class PlayerSerializer(serializers.ModelSerializer):
         model = Player
         fields = ('id', 'name', 'country', 'game_count', 'total_points')
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        if instance.games.count() > 0:
-            # data['number_of_moves'] = instance.games.number_of_moves
-            # data['date_played'] = instance.games.date_played
-            # data['opening_type'] = instance.games.opening_type.name
-            # data['color'] = instance.games.color
-            # data['country'] = instance.country.name
-            # data['rival_name'] = instance.rival_name.name
-            data['games'] = GameSerializer(instance.games, many=True).data
-        return data
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     if instance.games.count() > 0:
+    #         data['games'] = GameSerializer(instance.games, many=True).data
+    #     return data
 
 
 class GamePostSerializer(serializers.ModelSerializer):

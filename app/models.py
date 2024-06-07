@@ -8,6 +8,7 @@ class Country(models.Model):
 class Player(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    elo_rating = models.IntegerField()
 
     @property
     def game_count(self):
