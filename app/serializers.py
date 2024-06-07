@@ -1,11 +1,5 @@
 from rest_framework import serializers
-from app.models import Player, Country, Game, OpeningType
-
-
-class CountrySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Country
-        fields = '__all__'
+from app.models import Player, Game, OpeningType
 
 
 class OpeningTypeSerializer(serializers.ModelSerializer):
@@ -46,3 +40,4 @@ class GameSerializer(serializers.ModelSerializer):
         data['player'] = instance.player.name
         data['rival_name'] = instance.rival_name.name
         return data
+    
