@@ -1,6 +1,4 @@
 from django.db import models
-from mptt.fields import TreeForeignKey
-from mptt.models import MPTTModel
 
 
 class Country(models.Model):
@@ -9,7 +7,6 @@ class Country(models.Model):
 
 class Player(models.Model):
     name = models.CharField(max_length=100)
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
     @property
