@@ -18,10 +18,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'django_filters',
-    'app',
     'drf_yasg',
+    'cacheops',
+
+    'app',
+
 ]
 
 MIDDLEWARE = [
@@ -90,7 +94,9 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
     'DEFAULT_PAGINATION_CLASS': 'app.pagination.StandardResultsSetPagination',
-
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 3,
+    'DEFAULT_CACHE_BACKEND': 'django_redis.cache.RedisCache',
+    'DEFAULT_CACHE_ALIAS': 'default',
 }
 
 SWAGGER_SETTINGS = {
@@ -109,15 +115,15 @@ SWAGGER_SETTINGS = {
     },
 }
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": f"redis://{os.getenv('REDIS_HOST', 'localhost')}:6379/1",
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient"
-#         }
-#     }
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://localhost:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        }
+    }
+}
 
 LANGUAGE_CODE = 'en-us'
 

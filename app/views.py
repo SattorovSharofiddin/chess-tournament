@@ -1,12 +1,16 @@
+from cacheops import cached_view_as, cached_as
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.generics import ListAPIView
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
+from django.core.cache import cache
 from app.filters import PlayerFilter
 from app.models import Player, Game
 from app.serializers import PlayerSerializer, GameSerializer, GamePostSerializer
@@ -30,7 +34,10 @@ class PlayerList(ModelViewSet):
         ]
     )
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        data = super().list(request, *args, **kwargs)
+        if not cache.get('players'):
+            cache.set('players', data.data, timeout=60)
+        return Response(cache.get('players'))
 
 
 class GameList(ModelViewSet):
@@ -83,9 +90,9 @@ class GameList(ModelViewSet):
     def list(self, request, *args, **kwargs):
         start_date = self.request.query_params.get('start_date')
         end_date = self.request.query_params.get('end_date')
-        start_date += 'T00:00:00Z'
-        end_date += 'T23:59:59Z'
         if start_date and end_date:
+            start_date += 'T00:00:00Z'
+            end_date += 'T23:59:59Z'
             self.queryset = self.queryset.filter(date_played__range=[start_date, end_date])
         if self.request.query_params.get('result'):
             self.queryset = self.queryset.filter(result=self.request.query_params.get('result'))
@@ -94,3 +101,14 @@ class GameList(ModelViewSet):
         if self.request.query_params.get('player'):
             self.queryset = self.queryset.filter(player=self.request.query_params.get('player'))
         return super().list(request, *args, **kwargs)
+
+
+class UpdateRating(ListAPIView):
+    queryset = Player.objects.all()
+    serializer_class = PlayerSerializer
+
+    def get_queryset(self):
+        for player in Player.objects.all():
+            player.elo_rating += player.total_points
+            player.save()
+        return Player.objects.all().order_by('-elo_rating')

@@ -11,7 +11,7 @@ class OpeningTypeSerializer(serializers.ModelSerializer):
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
-        fields = ('id', 'name', 'country', 'game_count', 'total_points')
+        fields = ('id', 'name', 'country', 'game_count', 'total_points', 'elo_rating')
 
     # def to_representation(self, instance):
     #     data = super().to_representation(instance)
