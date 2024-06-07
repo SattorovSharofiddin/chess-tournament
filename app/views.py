@@ -1,16 +1,13 @@
-from cacheops import cached_view_as, cached_as
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from django.core.cache import cache
+
 from app.filters import PlayerFilter
 from app.models import Player, Game
 from app.serializers import PlayerSerializer, GameSerializer, GamePostSerializer
