@@ -120,17 +120,8 @@ img/
 img_t/
 img_m/
 test/
-script/error.html
-script/students.json
-script/students_errors.json
-script/teachers.json
-script/teachers_errors.json
 json_backup/
-teachers.py
-script/change_watch_lists.py
 dumps/
-script/img_p/
-script/img_t/
 img_p/
 test.txt
 migrations/

@@ -22,22 +22,33 @@ class PlayerSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         if instance.games.count() > 0:
-            data['result'] = instance.games.result
-            data['number_of_moves'] = instance.games.number_of_moves
-            data['date_played'] = instance.games.date_played
-            data['opening_type'] = instance.games.opening_type.name
-            data['color'] = instance.games.color
-            data['country'] = instance.country.name
-            data['rival_name'] = instance.rival_name.name
-            data['games'] = [game.id for game in instance.games.all()]
+            # data['number_of_moves'] = instance.games.number_of_moves
+            # data['date_played'] = instance.games.date_played
+            # data['opening_type'] = instance.games.opening_type.name
+            # data['color'] = instance.games.color
+            # data['country'] = instance.country.name
+            # data['rival_name'] = instance.rival_name.name
+            data['games'] = GameSerializer(instance.games, many=True).data
         return data
 
 
+class GamePostSerializer(serializers.ModelSerializer):
+    # date_played = serializers.DateTimeField(required=False)
+
+    class Meta:
+        model = Game
+        fields = ('result', 'color', 'number_of_moves', 'date_played', 'opening_type', 'player', 'rival_name')
+
+
 class GameSerializer(serializers.ModelSerializer):
-    white_player = serializers.PrimaryKeyRelatedField(queryset=Player.objects.all())
-    black_player = serializers.PrimaryKeyRelatedField(queryset=Player.objects.all())
     opening_type = serializers.PrimaryKeyRelatedField(queryset=OpeningType.objects.all())
 
     class Meta:
         model = Game
-        fields = '__all__'
+        fields = ('id', 'result', 'color', 'number_of_moves', 'date_played', 'opening_type')
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['player'] = instance.player.name
+        data['rival_name'] = instance.rival_name.name
+        return data

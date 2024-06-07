@@ -36,7 +36,7 @@ class Game(models.Model):
     color = models.CharField(max_length=5, choices=ChoiceColor.choices)
 
     number_of_moves = models.IntegerField()
-    date_played = models.DateTimeField(auto_now_add=True)
+    date_played = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     opening_type = models.ForeignKey(OpeningType, on_delete=models.CASCADE)
     player = models.ForeignKey(Player, related_name='games', on_delete=models.CASCADE)
