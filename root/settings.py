@@ -118,7 +118,7 @@ SWAGGER_SETTINGS = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://localhost:6379/1",
+        "LOCATION": f"redis://188.166.10.96:6379/1",  # localhost qo'yish kerak
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient"
         }
