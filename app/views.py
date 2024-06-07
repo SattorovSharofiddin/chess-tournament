@@ -19,6 +19,19 @@ class PlayerList(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = PlayerFilter
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('name', openapi.IN_QUERY, description="Name (icontains)", type=openapi.TYPE_STRING),
+            openapi.Parameter('elo_rating_min', openapi.IN_QUERY, description="Minimum ELO rating",
+                              type=openapi.TYPE_NUMBER),
+            openapi.Parameter('elo_rating_max', openapi.IN_QUERY, description="Maximum ELO rating",
+                              type=openapi.TYPE_NUMBER),
+            openapi.Parameter('country', openapi.IN_QUERY, description="Country (icontains)", type=openapi.TYPE_STRING),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class GameList(ModelViewSet):
     queryset = Game.objects.all()
