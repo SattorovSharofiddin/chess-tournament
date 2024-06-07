@@ -31,6 +31,7 @@ class PlayerList(ModelViewSet):
         ]
     )
     def list(self, request, *args, **kwargs):
+        self.pagination_class = None
         data = super().list(request, *args, **kwargs)
         if not cache.get('players'):
             cache.set('players', data.data, timeout=60)
