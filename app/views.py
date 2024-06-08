@@ -35,7 +35,35 @@ class PlayerList(ModelViewSet):
         data = super().list(request, *args, **kwargs)
         if not cache.get('players'):
             cache.set('players', data.data, timeout=60)
-        return Response(cache.get('players'))
+            data_cache = cache.get('players')
+            # filter data_cache 'name', 'elo_rating', 'country'
+            if request.query_params.get('name'):
+                data_cache = [player for player in data_cache if request.query_params.get('name') in player['name']]
+            if request.query_params.get('elo_rating_min'):
+                data_cache = [player for player in data_cache if
+                              player['elo_rating'] >= int(request.query_params.get('elo_rating_min'))]
+            if request.query_params.get('elo_rating_max'):
+                data_cache = [player for player in data_cache if
+                              player['elo_rating'] <= int(request.query_params.get('elo_rating_max'))]
+            if request.query_params.get('country'):
+                data_cache = [player for player in data_cache if
+                              request.query_params.get('country') in player['country']]
+            return Response(data_cache)
+        else:
+            data_cache = cache.get('players')
+            # filter data_cache 'name', 'elo_rating', 'country'
+            if request.query_params.get('name'):
+                data_cache = [player for player in data_cache if request.query_params.get('name') in player['name']]
+            if request.query_params.get('elo_rating_min'):
+                data_cache = [player for player in data_cache if
+                              player['elo_rating'] >= int(request.query_params.get('elo_rating_min'))]
+            if request.query_params.get('elo_rating_max'):
+                data_cache = [player for player in data_cache if
+                              player['elo_rating'] <= int(request.query_params.get('elo_rating_max'))]
+            if request.query_params.get('country'):
+                data_cache = [player for player in data_cache if
+                              request.query_params.get('country') in player['country']]
+            return Response(data_cache)
 
 
 class GameList(ModelViewSet):
